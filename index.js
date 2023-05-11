@@ -1,17 +1,64 @@
-const express=require('express');
-const app=express();
+const express = require('express');
+const path=require('path');
 
-app.get("",(req,resp)=>{
-    resp.send("this is main page");
-   
-    
+const dirpath=path.join(__dirname,'htmlFolder');
+//console.log(dirpath);//check
+const app = express();
+let port=399;
+
+
+app.get("/", (req, resp) => {
+    resp.send(`<h1>this is main page</h1> <a href="/help" >Help</a> <a href="/data">Data</a>  `);
+
+
 });
 
-app.get("/help",(req,resp)=>{
-    resp.send("this is help section");
-    resp.send(`
-    <input type="number" placeholder=" Enter name"/>
-    `);
+app.get("/help", (req, resp) => {
+    resp.send(" <input type='text' placeholder='enter text'/> <input type='button' value='submit'/> ");/*only one resp.send in 
+    any get if you put more than resp.send in one  */
 });
 
-app.listen(45);
+
+//json
+
+app.get("/data",(req,resp)=>{
+    resp.send([
+        {
+            'name':'satyam',
+            'mob':'9711051397'
+        },
+        {
+            'name':'satyam',
+            'mob':'9711051397'
+        },
+        {
+            'name':'satyam',
+            'mob':'9711051397'
+        },
+        {
+            'name':'satyam',
+            'mob':'9711051397'
+        }
+    ])
+})
+
+
+// now html make again
+app.use(express.static(dirpath));
+//without static method and also help to remove extension
+
+
+//app.get('',(_,resp)=>{
+//    resp.sendFile(`${dirpath}/about.html`);
+//});
+
+
+
+// not found page 404 paga
+
+app.get('*',(_,resp)=>{
+    resp.sendFile(`${dirpath}/notFound.html`);
+});
+
+
+app.listen(port);
